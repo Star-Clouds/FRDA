@@ -1,5 +1,4 @@
-# FaceDenseAlignment
-
+# Face Reconstruction and Dense Alignment
 
 ### Face Dense Alignment（12000 pts）
     
