@@ -2,7 +2,7 @@
     
 ## Introduction
     
-    This project implements some features related to face reconstruction and dense alignment.  
+   This project implements some features related to face reconstruction and dense alignment.  
 
    ![image](results/out.jpg)  
 
@@ -22,7 +22,8 @@
 
    
 ### Face Reconstruction
-    
+  ![image](results/fr.jpg)   
+
 
 
 

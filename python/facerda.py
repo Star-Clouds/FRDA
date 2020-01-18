@@ -5,20 +5,27 @@ import datetime
 
 
 class FaceRDA(object):
-    def __init__(self, model_path):
+    def __init__(self, model_path, bfm=False):
         self.ort_session = ort.InferenceSession(model_path)
         self.input_name = self.ort_session.get_inputs()[0].name
+        self.bfm = bfm
 
     def __call__(self, img, roi_box):
         h, w = img.shape[:2]
-        image = cv2.resize(img, (112, 112))
+        if self.bfm:
+            image = cv2.resize(img, (120, 120))
+        else:
+            image = cv2.resize(img, (112, 112))
         input_data = ((image - 127.5) / 128).transpose((2, 0, 1))
         tensor = input_data[np.newaxis, :, :, :].astype("float32")
         begin = datetime.datetime.now()
         output = self.ort_session.run(None, {self.input_name: tensor})[0][0]
         end = datetime.datetime.now()
         print("facerda cpu times = ", end - begin)
-        vertices = self.decode(output, w, h, roi_box)
+        if self.bfm:
+            vertices = self.decode_bfm(output, w, h, roi_box)
+        else:
+            vertices = self.decode(output, w, h, roi_box)
         return vertices
 
     def decode(self, output, w, h, roi_box):
@@ -31,4 +38,20 @@ class FaceRDA(object):
         sx, sy, ex, ey = roi_box
         vertices[0, :] = vertices[0, :] + sx
         vertices[1, :] = vertices[1, :] + sy
+        return vertices
+
+    def decode_bfm(self, output, w, h, roi_box):
+        print(output.shape)
+        # move to center of image
+        output[0, :] = output[0, :] + 120 / 2
+        output[1, :] = output[1, :] + 120 / 2
+        # flip vertices along y-axis.
+        output[1, :] = 120 - output[1, :] - 1
+        vertices = output
+        sx, sy, ex, ey = roi_box
+        scale_x = (ex - sx) / 120
+        scale_y = (ey - sy) / 120
+        vertices[0, :] = vertices[0, :] * scale_x + sx
+        vertices[1, :] = vertices[1, :] * scale_y + sy
+
         return vertices

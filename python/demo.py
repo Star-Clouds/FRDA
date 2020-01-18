@@ -10,8 +10,8 @@ def test_facerda():
 
     h, w = frame.shape[:2]
     centerface = CenterFace(h, w, landmarks=True)
-    model_path = "../model/frda_all_sim.onnx"
-    facerda = FaceRDA(model_path)
+    model_path = "../model/frda_sim.onnx"
+    facerda = FaceRDA(model_path, True)
 
     dets, _ = centerface(frame, threshold=0.5)  # 3. forward
     if dets.shape[0] == 0:
@@ -33,8 +33,8 @@ def camera_facerda():
 
     h, w = frame.shape[:2]
     centerface = CenterFace(h, w, landmarks=True)
-    model_path = "../model/frda_all_sim.onnx"
-    facerda = FaceRDA(model_path)
+    model_path = "../model/frda_sim.onnx"
+    facerda = FaceRDA(model_path, True)
 
     while success:
         success, frame = cap.read()
@@ -53,5 +53,5 @@ def camera_facerda():
 
 
 if __name__ == "__main__":
-    test_facerda()
-    # camera_facerda()
+    # test_facerda()
+    camera_facerda()
