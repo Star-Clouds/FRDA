@@ -28,6 +28,6 @@
 - Python3.6+
     
 ## Discussion
-  Welcome to join in QQ Group(912759877) for more discussion, including but not limited to 3d face, face anti-spoofing and so on.
+  Welcome to join in QQ Group(229042802) for more discussion, including but not limited to 3d face, face anti-spoofing and so on.
 
 
